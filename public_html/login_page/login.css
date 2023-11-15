@@ -1,0 +1,166 @@
+
+/*---------------------------------------------- Custom Colors --------------------------------------------------------*/
+:root {
+    --darknavy: #00100F;
+    --darknavyshadow:rgba(0, 16, 15, 0.95);
+    --darknavytransparent:rgba(0, 16, 15, 0.75);
+    --navy: #072F2E;
+    --navytransparent: rgba(7, 47, 46, 0.5);
+    --darkcyan: #017481;
+    --cyan: #0092A2;
+    --cyantransparent: #0092a277;
+    --neoncyan: #00e5ff;
+  }
+
+/*---------------------------------------------- Placeholder text color ----------------------------------------------*/
+::placeholder {
+    color: var(--navytransparent);
+    opacity: 1;
+  }
+
+/*---------------------------------------------- CSS Reset -----------------------------------------------------------*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+textarea:focus, input:focus{
+    outline: none;
+}
+
+/*---------------------------------------------- Background ----------------------------------------------------------*/
+body {
+    background: linear-gradient(180deg, var(--darknavyshadow) 50%, #00000000 100%), url('./ocean.jpg'); /*photo is public domain by Philip Myrtorp on Unsplash*/
+    background-attachment: fixed; /* allows gradient to fill page */
+    background-size: cover;
+}
+
+#ls_page {
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+
+/*---------------------------------------------- Background lines ----------------------------------------------------*/
+.ls_lines_bot {
+    z-index: -1;
+    border-left: 6px solid var(--darknavy);
+    height: 900px;
+    position: fixed;
+}
+
+#ls_line1 {
+    left: 30px;
+}
+
+#ls_line2 {
+    left: 60px;
+}
+
+#ls_line3 {
+    left: 90px;
+}
+
+#ls_line4 {
+    right: 30px;
+}
+
+#ls_line5 {
+    right: 60px;
+}
+
+#ls_line6 {
+    right: 90px;
+}
+
+/*---------------------------------------------- Text ----------------------------------------------------------------*/
+#ls_title {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 50px;
+    color: var(--neoncyan);
+    text-align: center;
+    margin-bottom: 3%;
+}
+
+#ls_username_label, #ls_password_label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    color: var(--neoncyan);
+    margin-left: 10%;
+}
+
+#ls_create_link {
+    display: block;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    color: var(--neoncyan);
+    text-align: center;
+    margin-top: 5%;
+}
+
+#ls_password_toggle_label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: var(--neoncyan);
+    margin-bottom: 1%;
+}
+
+#ls_or{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    color: var(--cyan);
+    opacity: 0.5;
+    text-align: center;
+}
+
+/*---------------------------------------------- Buttons -------------------------------------------------------------*/
+#ls_login_button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    display: block;
+    border: none;
+    border-radius: 25px;
+    background-color: var(--cyan);
+    color: var(--darknavy);
+    width: 80%;
+    height: 30px;
+    text-align: center;
+    display: inline-block;
+    margin-left: 10%;
+    margin-bottom: 7%;
+    margin-top: 3%;
+    cursor: pointer;
+}
+
+#ls_password_toggle {
+    margin-left: 10%;
+    cursor: pointer;
+}
+
+/*---------------------------------------------- Login Box -----------------------------------------------------------*/
+#ls_box {
+    margin: auto;
+    margin-top: 7%;
+    padding: 5% 0% 2% 0%;
+    width: 33%;
+    height: 50%;
+    background: var(--darknavytransparent);
+    border-width: 10px;
+    border-style: solid;
+    border-image-slice: 1;
+    border-image-source: linear-gradient(180deg, var(--cyan) 10%, var(--darknavy) 50%);
+}
+
+/*---------------------------------------------- Text Boxes ----------------------------------------------------------*/
+#ls_username_input, #ls_password_input {
+    display: block;
+    border: none;
+    border-bottom: 3px solid var(--navy);
+    background-color: #00000000;
+    color: var(--cyan);
+    width: 80%;
+    height: 30px;
+    padding: 5px;
+    margin-left: 10%;
+}

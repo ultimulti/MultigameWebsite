@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="./login.css">
+  </head>
+  <body>
+    <main>
+
+      <div id="ls_page">
+
+        <div id="ls_box">
+
+          <h1 id="ls_title">Welcome!</h1>
+  
+          <form>
+            <label for="ls_username_input" id="ls_username_label">Username *</label>
+            <input type="text" id="ls_username_input" name="ls_username_input" placeholder="Enter your Username">
+            <br>
+            <label for="ls_password_input" id="ls_password_label">Password *</label>
+            <input type="password" id="ls_password_input" name="ls_password_input" placeholder="Enter your Password">
+            <br>
+            <input type="checkbox" id="ls_password_toggle" onclick="passwordToggle()">
+            <label for="ls_password_toggle" id="ls_password_toggle_label">Show Password</label>
+            <br>
+            <button type="button" id='ls_login_button'>Login</button>
+            <br>
+            <p id="ls_or">—————— or ——————</p>
+          </form>
+  
+          <a href="./create_account.html" id="ls_create_link">Create an Account!</a>
+  
+        </div>
+
+        <div id="ls_bottom_lines">
+
+          <div id="ls_line1" class="ls_lines_bot"></div>
+          <div id="ls_line2" class="ls_lines_bot"></div>
+          <div id="ls_line3" class="ls_lines_bot"></div>
+          <div id="ls_line4" class="ls_lines_bot"></div>
+          <div id="ls_line5" class="ls_lines_bot"></div>
+          <div id="ls_line6" class="ls_lines_bot"></div>
+
+        </div>
+
+      </div>
+
+    </main>
+	<script src="login.js"></script>
+  </body>
+</html>
