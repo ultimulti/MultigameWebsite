@@ -1,13 +1,13 @@
 function easyConnect4() {
-    // take to connect 4 on easy
+    window.location.href = "../ConnectFour/connectFour.html"
 }
 
 function medConnect4() {
-    // take to connect 4 on medium
+    window.location.href = "../ConnectFour/connectFour.html"
 }
 
 function hardConnect4() {
-    // take to connect 4 on hard
+    window.location.href = "../ConnectFour/connectFour.html"
 }
 
 function wordle() {
