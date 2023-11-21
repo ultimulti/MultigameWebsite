@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Menu</title>
+    <link rel="stylesheet" href="./menu.css">
+  </head>
+  <body>
+    <main>
+
+        <div id="m_nav_bar">
+
+            <div id="m_nav_wordle">
+
+                <span id="m_wordle_hs_label" class="m_nav_text">Wordle Highscore!</span>
+                <br>
+                <!-- change to display wordle hs of user -->
+                <span id="m_wordle_hs" class="m_nav_text">0</span>
+
+            </div>
+
+            <div id="m_nav_connect4">
+
+                <span id="m_connect4_hs_label" class="m_nav_text">Connect 4 Highscore!</span>
+                <br>
+                <!-- change to display c4 hs of user -->
+                <span id="m_connect4_hs" class="m_nav_text">0</span>
+
+            </div>
+
+            <div id="m_nav_profile">
+                <!-- change to username -->
+                <span id="m_profile_name" class="m_nav_text">Profile Name</span>
+                <br>
+                <!-- change to user bio -->
+                <span id="m_profile_bio" class="m_nav_text">I love online games!</span>
+                <!-- <img src="image.jpg" alt="account profile picture" id="m_profile_picture"> -->
+                <!-- unsure if we want img -->
+
+            </div>
+
+        </div>
+
+        <div id="m_friends_tab">
+
+            <div id="m_friend_box">
+
+                <!-- Edit when server side code/db is up and running to display user friends -->
+
+                <!-- unsure if we want profile pictures for anyone? -->
+
+                <span id="m_friend_name">Friend Name</span>
+                <br>
+                <span id="m_friend_wordle_hs_label" class="m_friend_stats">Wordle Highscore! -- </span>
+                <span id="m_friend_wordle_hs" class="m_friend_stats">0</span>
+                <br>
+                <span id="m_friend_connect4_hs_label" class="m_friend_stats">Connect 4 Highscore! -- </span>
+                <span id="m_friend_connect4_hs" class="m_friend_stats">0</span>
+
+            </div>
+            
+        </div>
+
+        <div id="m_wordle_card" class="m_card">
+
+            <div id="m_wordle_cover" class="m_cover">
+
+                <button type="button" id='m_wordle_button' onclick="wordle()">Play</button>
+                
+            </div>
+
+            <img src="wordle_card.png" alt="wordle card" id="m_wordle_card_img" style='height: 100%; width: 100%; object-fit: contain'/>
+            
+        </div>
+
+        <div id="m_connect4_card" class="m_card">
+
+            <div id="m_connect4_cover" class="m_cover">
+
+                <button type="button" id='m_connect4_easy' class="m_connect4_button" onclick="easyConnect4()">Easy</button>
+                <br>
+                <button type="button" id='m_connect4_med' class="m_connect4_button" onclick="medConnect4()">Medium</button>
+                <br>
+                <button type="button" id='m_connect4_hard' class="m_connect4_button" onclick="hardConnect4()">Hard</button>
+
+            </div>
+
+
+
+            <img src="connect4_card.png" alt="connect 4 card" id="m_connect4_card_img" style='height: 100%; width: 100%; object-fit: contain'>
+            
+        </div>
+
+    </main>
+	<script src="menu.js"></script>
+  </body>
+</html>

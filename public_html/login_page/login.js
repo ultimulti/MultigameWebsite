@@ -6,3 +6,8 @@ function passwordToggle() {
       x.type = "password";
     }
   }
+
+function login() {
+  // need to check for user in db
+  window.location.href = "../menu_page/menu.html"
+}
