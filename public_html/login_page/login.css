@@ -31,7 +31,7 @@ textarea:focus, input:focus{
 
 /*---------------------------------------------- Background ----------------------------------------------------------*/
 body {
-    background: linear-gradient(180deg, var(--darknavyshadow) 50%, #00000000 100%), url('./sky.jpg'); /*photo is public domain by Philip Myrtorp on Unsplash*/
+    background: linear-gradient(180deg, var(--darknavyshadow) 50%, #00000000 100%), url('../images/sky.jpg'); /*photo is public domain by Philip Myrtorp on Unsplash*/
     background-attachment: fixed; /* allows gradient to fill page */
     background-size: cover;
 }
