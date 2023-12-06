@@ -1,13 +1,13 @@
-function easyConnect4() {
-    // take to connect 4 on easy
+// const socket = io();
+
+function hostGame() {
+    // create cookie with random id with fetch request and redirect
 }
 
-function medConnect4() {
-    // take to connect 4 on medium
-}
+function joinGame() {
+    // create cookie with room id from page and redirect
+    let roomId = document.getElementById('room_name').value;
 
-function hardConnect4() {
-    // take to connect 4 on hard
 }
 
 function wordle() {
