@@ -59,13 +59,15 @@ app.post('/login', async (req, res) => {
 
   app.get('/get/friends/:USERNAME', async (req, res) => {
 
+    // not tested
+
     let users = []
     let items = []
   
     console.log(req.session)
   
     UserData.find({ username: req.params.USERNAME }).then((users) => {
-      let listing = users[0].friends
+      let friend = users[0].friends
       ItemData.find({ _id: { $in: friends } }).then((items) => {
         res.status(200).json(items)
       })
