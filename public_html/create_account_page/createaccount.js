@@ -18,8 +18,6 @@ function create() {
 		body: JSON.stringify(obj)
 	});
 
-	sendUser();
-
   //added to db, page does not redirect or popup
 
   window.alert("Account Created!");
