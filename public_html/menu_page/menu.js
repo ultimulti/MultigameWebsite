@@ -1,13 +1,13 @@
-function easyConnect4() {
-    window.location.href = "../ConnectFour/connectFour.html"
+// const socket = io();
+
+function hostGame() {
+    // create cookie with random id with fetch request and redirect
 }
 
-function medConnect4() {
-    window.location.href = "../ConnectFour/connectFour.html"
-}
+function joinGame() {
+    // create cookie with room id from page and redirect
+    let roomId = document.getElementById('room_name').value;
 
-function hardConnect4() {
-    window.location.href = "../ConnectFour/connectFour.html"
 }
 
 function wordle() {

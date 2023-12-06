@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Menu</title>
     <link rel="stylesheet" href="./menu.css">
+    <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
     <main>
@@ -60,7 +61,7 @@
                 <span id="m_friend_connect4_hs" class="m_friend_stats">0</span>
 
             </div>
-            
+
         </div>
 
         <div id="m_wordle_card" class="m_card">
@@ -68,29 +69,28 @@
             <div id="m_wordle_cover" class="m_cover">
 
                 <button type="button" id='m_wordle_button' onclick="wordle()">Play</button>
-                
+
             </div>
 
             <img src="../images/wordle_card.png" alt="wordle card" id="m_wordle_card_img" style='height: 100%; width: 100%; object-fit: contain'/>
-            
+
         </div>
 
         <div id="m_connect4_card" class="m_card">
 
             <div id="m_connect4_cover" class="m_cover">
 
-                <button type="button" id='m_connect4_easy' class="m_connect4_button" onclick="easyConnect4()">Easy</button>
+                <button type="button" id='Host_Game' class="m_connect4_button" onclick="hostGame()">Host Game</button>
                 <br>
-                <button type="button" id='m_connect4_med' class="m_connect4_button" onclick="medConnect4()">Medium</button>
-                <br>
-                <button type="button" id='m_connect4_hard' class="m_connect4_button" onclick="hardConnect4()">Hard</button>
+                <input type="input" id='room_name' class="m_connect4_button" placeholder="Room Code"></input>
+                <button type="button" id='Join_Game' class="m_connect4_button" onclick="joinGame()">Join Game</button>
 
             </div>
 
 
 
             <img src="../images/connect4_card.png" alt="connect 4 card" id="m_connect4_card_img" style='height: 100%; width: 100%; object-fit: contain'>
-            
+
         </div>
 
     </main>
