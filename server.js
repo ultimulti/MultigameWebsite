@@ -247,6 +247,10 @@ End of Login and User Session
 
     // find top 10 connect 4
 
+    UserData.find().sort( { connect4HS : -1 } ).then((users) => {
+      res.status(200).json(users)
+    })
+
   })
 
   app.get('/get/leaderboard/wordle', async (req, res) => {
