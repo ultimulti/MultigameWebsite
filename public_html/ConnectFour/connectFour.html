@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Connect Four</title>
     <link rel="stylesheet" href="./connectFour.css">
+    <script src="/socket.io/socket.io.js"></script>
     <script src="./connectFour.js"></script>
   </head>
   <body onload="makeRows(6,7)">
@@ -36,16 +37,17 @@
     </nav>
     <main>
       <div id="page">
+        <h1 id="ROOMID"></h1>
 
         <div id="box">
           <h1 id="title"></h1>
           <div id="gameContainer">
 
           </div>
+          <button class="m_connect4_button off" id="take_home_button" onclick="takeHome()">Return To Home</button>
         </div>
 
       </div>
     </main>
-	<script src="login.js"></script>
   </body>
 </html>

@@ -200,3 +200,22 @@ main {
 .player-two {
   background-color: #C29E5C !important;
 }
+
+
+.m_connect4_button {
+  display: block;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  border: none;
+  background-color: var(--cyan);
+  color: white;
+  width: 80%;
+  height: 30px;
+  margin: auto;
+  text-align: center;
+  cursor: pointer;
+}
+
+.off {
+  display: none;
+}
