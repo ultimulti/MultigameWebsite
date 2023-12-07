@@ -3,6 +3,8 @@ const socket = io();
 var playerOne = "P1";
 var playerTwo = "P2";
 var currentPlayer = playerOne;
+var playerName = '';
+var currentPlayerName = '';
 
 var currCols = [];
 var board = [];
@@ -18,7 +20,8 @@ fetch('http://127.0.0.1:3000/get-cookies')
 .then((cookies) => {
   console.log(cookies);
   roomId = cookies.roomID;
-  document.getElementById('ROOMID').innerHTML = roomId;
+  playerName = cookies.login.username
+  document.getElementById('ROOMID').innerHTML = 'Room Id: ' + roomId;
   socket.emit("join-room", roomId, message => {
     console.log(message)
   });
@@ -26,13 +29,13 @@ fetch('http://127.0.0.1:3000/get-cookies')
 
 socket.on('connect', ()=> {
   socket.emit('check-for-opponent', roomId, (playerCount) => {
-    console.log('you are player: ', playerCount);
     if (playerCount == 1) {
-      document.getElementById('title').innerHTML = 'You are player 1';
+      currentPlayerName = playerName;
       localStorage.setItem("player", "P1");
+      document.getElementById('title').innerHTML = 'You are player 1';
     } else if(playerCount == 2) {
-      document.getElementById('title').innerHTML = 'You are player 2';
       localStorage.setItem("player", "P2");
+      document.getElementById('title').innerHTML = 'You are player 2';
     }
   });
 });
@@ -64,13 +67,13 @@ function makeRows(rows, cols) {
   }
 };
 
-function checkWinner() {
+function checkWinner(player) {
   // horizontal
   for (let r = 0; r < 6; r++) {
     for (let c = 0; c < 7 - 3; c++) {
       if (board[r][c] != ' ') {
         if (board[r][c] == board[r][c + 1] && board[r][c + 1] == board[r][c + 2] && board[r][c + 2] == board[r][c + 3]) {
-          winGame(r, c);
+          winGame(player);
           return;
         }
       }
@@ -82,7 +85,7 @@ function checkWinner() {
     for (let r = 0; r < 6 - 3; r++) {
       if (board[r][c] != ' ') {
         if (board[r][c] == board[r + 1][c] && board[r + 1][c] == board[r + 2][c] && board[r + 2][c] == board[r + 3][c]) {
-          winGame(r, c);
+          winGame(player);
           return;
         }
       }
@@ -94,7 +97,7 @@ function checkWinner() {
     for (let c = 0; c < 7 - 3; c++) {
       if (board[r][c] != ' ') {
         if (board[r][c] == board[r + 1][c + 1] && board[r + 1][c + 1] == board[r + 2][c + 2] && board[r + 2][c + 2] == board[r + 3][c + 3]) {
-          winGame(r, c);
+          winGame(player);
           return;
         }
       }
@@ -106,7 +109,7 @@ function checkWinner() {
     for (let c = 0; c < 7 - 3; c++) {
       if (board[r][c] != ' ') {
         if (board[r][c] == board[r - 1][c + 1] && board[r - 1][c + 1] == board[r - 2][c + 2] && board[r - 2][c + 2] == board[r - 3][c + 3]) {
-          winGame(r, c);
+          winGame(player);
           return;
         }
       }
@@ -130,29 +133,17 @@ function placePiece() {
     return;
   }
 
-  // console.log(localStorage.getItem('player'), currentPlayer);
-  socket.emit('new-move', roomId, row, col)
-
-  // board[row][col] = currentPlayer;
-  // let tile = document.getElementById(row.toString() + '-' + col.toString());
-  // if (currentPlayer == playerOne) {
-  //   tile.classList.add('player-one');
-  //   currentPlayer = playerTwo;
-  // } else {
-  //   tile.classList.add('player-two');
-  //   currentPlayer = playerOne;
-  // }
-
-  // row -= 1;
-  // currCols[col] = row;
-  // checkWinner();
+  socket.emit('new-move', playerName, roomId, row, col)
 }
 
-socket.on('update-board', (row, col) => {
+socket.on('update-board', (row, col, player) => {
   console.log('current player is: ', currentPlayer);
   console.log(row, col);
   board[row][col] = currentPlayer;
   let tile = document.getElementById(row.toString() + '-' + col.toString());
+
+  checkWinner(player);
+
   if (currentPlayer == playerOne) {
     tile.classList.add('player-one');
     currentPlayer = playerTwo;
@@ -163,16 +154,32 @@ socket.on('update-board', (row, col) => {
 
   row -= 1;
   currCols[col] = row;
-  checkWinner();
 });
 
-function winGame(r, c) {
+function winGame(player) {
   let winner = document.getElementById("title");
-  if (board[r][c] == playerOne) {
+  if (currentPlayer == playerOne) {
       winner.innerText = "Player One Wins!";
   } else {
       winner.innerText = "Player Two Wins!";
   }
+
+  fetch('http://127.0.0.1:3000/post/connect4', {
+    method: 'POST',
+    body: JSON.stringify({
+      username: player
+    }),
+    headers: { 'Content-Type': 'application/json'}
+  })
+  .then((res)=> {
+    if(res.ok) {
+      return res.json();
+    } else {
+      document.getElementById("scoreError").innerText = 'problem updating score';
+      throw new Error('problem updating score');
+    }
+  })
+
   gameOver = true;
   localStorage.clear();
   document.getElementById("take_home_button").classList.toggle('off');
@@ -180,5 +187,6 @@ function winGame(r, c) {
 }
 
 function takeHome() {
+  localStorage.clear();
   window.location.href = "../menu_page/menu.html"
 }

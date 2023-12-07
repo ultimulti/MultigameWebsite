@@ -3,6 +3,7 @@ const parser = require('body-parser');
 const mongoose = require("mongoose");
 const cookieParser = require('cookie-parser');
 
+
 //var ejs = require('ejs');
 var path = require ('path');
 const crypto = require('crypto');
@@ -17,7 +18,7 @@ app.use(express.static('public_html')); // serve files in public_html
 app.use(cookieParser());
 
 /*
-Thompson's Wordle code. 
+Thompson's Wordle code.
 */
 //==========================================================================
 const fs = require('fs'); // file system module
@@ -27,7 +28,7 @@ const { resourceLimits } = require('worker_threads');
 const answerList = [];
 const validList = [];
 
-//fill in the storage for answer words and valid words. 
+//fill in the storage for answer words and valid words.
 function getAnswerAndKeyList() {
     const answerData = fs.readFileSync('public_html/answer.txt','utf8');
     const validData = fs.readFileSync('public_html/valid.txt','utf8');
@@ -48,7 +49,7 @@ app.get('/getword', function(req, res){
   res.end(answerList[Math.floor(Math.random()*answerList.length)]);
 });
 
-// checking if word is in the dictionary 
+// checking if word is in the dictionary
 app.get('/checklib/:word', function(req, res){
   res.statusCode = 200;
 
@@ -131,7 +132,7 @@ function authenticate(req, res, next) {
   console.log('auth request:');
   console.log(req.cookies);
   if (c != undefined) {
-    if (sessions[c.login.username] != undefined && 
+    if (sessions[c.login.username] != undefined &&
       sessions[c.login.username].id == c.login.sessionID) {
       next();
     } else {
@@ -199,9 +200,9 @@ app.post('/login/user', function(req, res){
           console.log(currentUser.hash);
 
           if (result == currentUser.hash){
-              let sid = addSession(user); 
-              res.cookie("login", 
-                {username: user, sessionID: sid}, 
+              let sid = addSession(user);
+              res.cookie("login",
+                {username: user, sessionID: sid},
                 {maxAge: 10000000 * 2 });
               res.end('SUCCESS');
           }
@@ -213,9 +214,29 @@ app.post('/login/user', function(req, res){
 })
 
 app.use('./public_html/*', authenticate);
-// Getting the current user. 
+// Getting the current user.
 app.get('/current/user', function(req, res){
   res.end(req.cookies.login.username);
+});
+
+app.post('/post/:game', function(req, res){
+  let u = req.body.username;
+  let p1 = UserData.findOne({username: {$regex: u}}).exec();
+  p1.then((user) =>{
+    let currentUser = user;
+    if (req.params.game == 'wordle'){
+      let temp = currentUser.wordleHS;
+      for (let i = 0; i <temp.length; i++){
+        temp[i] += req.body.score[i];
+      }
+      currentUser.wordleHS = temp;
+      console.log(currentUser.wordleHS);
+      currentUser.save();
+    } else {
+      currentUser.connect4HS = currentUser.connect4HS + 1;
+      currentUser.save();
+    }
+  })
 });
 //==========================================================================
 /*
@@ -271,18 +292,14 @@ app.post('/add/user/', function (req, res) {
 
 // sets the cookie in the browser for 10 minutes
 app.get('/set-room-cookie/:id', (req, res) => {
-  console.log('reqesting cookie', req.params.id);
   let roomId = '';
   if(req.params.id !== 'new') {
     roomId = req.params.id;
-    console.log('setting roomId to passed id: ' + roomId);
   } else {
     let characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'; // characters used in string
     for (let i = 6; i > 0; i--) {
-      console.log(i);
       roomId += characters[Math.floor(Math.random() * characters.length)];
     }
-    console.log('generated new roomId: ', roomId);
   }
   res.cookie('roomID', roomId, {
     maxAge: 600000
@@ -308,24 +325,35 @@ io.on('connection', (socket) => {
 
   socket.on('join-room', (room, cb) => {
     socket.join(room);
+    console.log('joined room', room);
     cb(`Joined room ${room}`);
   });
 
   socket.on('check-for-opponent', (roomId, cb) => {
+    // using as a wait, to let room be updated
+    for(let i = 500; i > 0; i--) {
+      process.stdout.write("|");
+    }
     io.in(roomId).fetchSockets()
     .then((sockets) => {
-      let playercount = sockets.length;
+      return sockets.length;
+    })
+    .then((playercount) => {
+      console.log('Playercount', playercount);
       cb(playercount);
+      return playercount;
+    })
+    .then((playercount) => {
       if(playercount == 2) {
         console.log('start game');
         io.in(roomId).emit('start-game');
       }
-    })
+    });
   });
 
-  socket.on('new-move', (roomId, row, col) => {
-    console.log(row, col);
-    io.in(roomId).emit('update-board', row, col);
+  socket.on('new-move', (player, roomId, row, col) => {
+    console.log(player, row, col);
+    io.in(roomId).emit('update-board', row, col, player);
   })
 
 });
