@@ -10,20 +10,20 @@ function create() {
 		password: pass.value
 	};
 
-	fetch("/add/user", {
+	let p = fetch("/add/user", {
 		method: 'POST',
 		headers: {
 			"Content-type": "application/json"
 		},
 		body: JSON.stringify(obj)
 	});
-
-	sendUser();
-
-  //added to db, page does not redirect or popup
-
-  window.alert("Account Created!");
-
-
-  window.location.href = "../index.html"
+	p.then((response) => {
+		return response.text();
+	  }).then((text) => {
+		alert(text);
+		if (text.startsWith('SUCCESS')) {
+			window.location.href = "../index.html";
+		}
+	  });
+  	
 }
