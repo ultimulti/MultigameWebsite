@@ -1,3 +1,5 @@
+const socket = io();
+
 var playerOne = "P1";
 var playerTwo = "P2";
 var currentPlayer = playerOne;
@@ -5,6 +7,39 @@ var currentPlayer = playerOne;
 var currCols = [];
 var board = [];
 var gameOver = false;
+var gameStart = false;
+
+let roomId = '';
+
+fetch('http://127.0.0.1:3000/get-cookies')
+.then((res) => {
+  return res.json();
+})
+.then((cookies) => {
+  console.log(cookies);
+  roomId = cookies.roomID;
+  document.getElementById('ROOMID').innerHTML = roomId;
+  socket.emit("join-room", roomId, message => {
+    console.log(message)
+  });
+});
+
+socket.on('connect', ()=> {
+  socket.emit('check-for-opponent', roomId, (playerCount) => {
+    console.log('you are player: ', playerCount);
+    if (playerCount == 1) {
+      document.getElementById('title').innerHTML = 'You are player 1';
+      localStorage.setItem("player", "P1");
+    } else if(playerCount == 2) {
+      document.getElementById('title').innerHTML = 'You are player 2';
+      localStorage.setItem("player", "P2");
+    }
+  });
+});
+
+socket.on('start-game', () => {
+  gameStart = true;
+})
 
 
 function makeRows(rows, cols) {
@@ -81,7 +116,7 @@ function checkWinner() {
 
 function placePiece() {
   // check game status
-  if (gameOver) {
+  if (gameOver || gameStart == false || localStorage.getItem('player') != currentPlayer) {
     return;
   }
 
@@ -95,6 +130,27 @@ function placePiece() {
     return;
   }
 
+  // console.log(localStorage.getItem('player'), currentPlayer);
+  socket.emit('new-move', roomId, row, col)
+
+  // board[row][col] = currentPlayer;
+  // let tile = document.getElementById(row.toString() + '-' + col.toString());
+  // if (currentPlayer == playerOne) {
+  //   tile.classList.add('player-one');
+  //   currentPlayer = playerTwo;
+  // } else {
+  //   tile.classList.add('player-two');
+  //   currentPlayer = playerOne;
+  // }
+
+  // row -= 1;
+  // currCols[col] = row;
+  // checkWinner();
+}
+
+socket.on('update-board', (row, col) => {
+  console.log('current player is: ', currentPlayer);
+  console.log(row, col);
   board[row][col] = currentPlayer;
   let tile = document.getElementById(row.toString() + '-' + col.toString());
   if (currentPlayer == playerOne) {
@@ -108,7 +164,7 @@ function placePiece() {
   row -= 1;
   currCols[col] = row;
   checkWinner();
-}
+});
 
 function winGame(r, c) {
   let winner = document.getElementById("title");
@@ -118,6 +174,9 @@ function winGame(r, c) {
       winner.innerText = "Player Two Wins!";
   }
   gameOver = true;
+  localStorage.clear();
+  document.getElementById("take_home_button").classList.toggle('off');
+  document.getElementById("gameContainer").style.display = 'none';
 }
 
 function takeHome() {
