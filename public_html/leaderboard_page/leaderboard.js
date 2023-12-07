@@ -48,7 +48,7 @@ function connect4LB() {
                     <p id="lb_username">${items[i].username}</p>
                     <p id="lb_score">${items[i].connect4HS}</p>
                     </div>`;
-                    if (1 == 9) {
+                    if (count == 9) {
                         break
                     }
             }
