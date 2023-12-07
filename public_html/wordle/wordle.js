@@ -1,6 +1,10 @@
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+  let y = []; // the current score of the user
+  await getCurScore();
+  console.log(y); 
   createSquares();
   getNewWord();
+  
   let guessedWords = [[]]; // array of arrays of letters
   let availableSpace = 1; // the next available space on the board
   let word; // the word to be guessed
@@ -20,6 +24,23 @@ document.addEventListener("DOMContentLoaded", () => {
     popup.classList.toggle('active');}, 1500);
   }
 
+  // update the score of the user
+  function updateScore(curIndex){
+    var scoreList = [0,0,0,0,0,0,1];
+    scoreList[curIndex-1]++;
+    var obj = {score: scoreList};
+
+    fetch('/post/wordle', {
+      method: 'POST',
+      body: JSON.stringify(obj),
+      headers: {"Content-Type": "application/json"}
+    }).then((response) => {
+      return response.text();
+    }).then((text) => {
+      console.log(text);
+    });
+  }
+
   // popup window for losing
   function toggleMode2(actualWord){
     console.log("toggle");
@@ -33,10 +54,28 @@ document.addEventListener("DOMContentLoaded", () => {
     popup.classList.toggle('active');}
     , 1500);
   }
+
+  async function getCurScore() {
+    fetch('/get/user/hs', {
+      method: 'GET'
+    }).then((response) => {
+      return response.text();
+    }).then((text) => {
+      var scoreList = JSON.parse(text);
+      var score = scoreList;
+      console.log(score);
+      return score;
+    }).then((score) => {
+      console.log(score);
+      y = score;
+  });
+}
   // graphing the result graph
-  function graph(){
+  function graph(actualInput){
     var x = [1,2,3,4,5,6];
-    var y = [1,2,3,4,5,6]; // replace with actual data
+    var y = actualInput.splice(6,1);
+    console.log('here');
+    console.log(y); 
     barColor = "green";
     const chart = new Chart("myChart", {
       type: "horizontalBar",
@@ -150,18 +189,20 @@ document.addEventListener("DOMContentLoaded", () => {
             }, interval * index);
             
           });
-
+          console.log(currentWord);
+          console.log(word);
           guessedWordCount += 1;
           lastDeletableIndex = guessedWordCount * 5;
           if (currentWord === word) {
-            console.log(guessedWordCount);
-            graph();
+            updateScore(guessedWordCount);
+            y[guessedWordCount-1]++;
+            graph(y);
             toggleMode();
             //window.alert("Congratulations!");
           }
 
           if (guessedWords.length === 6) {
-            graph();
+            graph(y);
             toggleMode2(word);
             //window.alert(`Sorry, you have no more guesses! The word is ${word}.`);
             

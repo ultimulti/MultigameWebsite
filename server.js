@@ -1,6 +1,7 @@
 const express = require('express')
 const parser = require('body-parser');
 const mongoose = require("mongoose");
+const cookieParser = require('cookie-parser');
 //var ejs = require('ejs');
 var path = require ('path');
 const crypto = require('crypto');
@@ -9,9 +10,10 @@ const app = express();
 
 const port = 3000;
 
+app.use(cookieParser()); 
 app.use(parser.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static('public_html')); // serve files in public_html
+
 
 /*
 Thompson's Wordle code. 
@@ -19,6 +21,7 @@ Thompson's Wordle code.
 //==========================================================================
 const fs = require('fs'); // file system module
 const { resourceLimits } = require('worker_threads');
+const { get } = require('http');
 
 //set up storage for answer words and valid words.
 const answerList = [];
@@ -130,12 +133,13 @@ function authenticate(req, res, next) {
   if (c != undefined) {
     if (sessions[c.login.username] != undefined && 
       sessions[c.login.username].id == c.login.sessionID) {
-      next();
+      console.log("AUTHENTICATED");
+        next();
     } else {
-      res.redirect('../index.html');
+      res.redirect('/index.html');
     }
-  }  else {
-    res.redirect('../index.html');
+  } else {
+    res.redirect('/index.html');
   }
 }
 
@@ -158,7 +162,7 @@ app.post('/add/user', function(req, res){
           let data = h.update(toHash, 'utf-8');
           let result = data.digest('hex');
 
-          let newUser = new UserData({username: user, hash: result, salt: newSalt, friends: [], wordleHS: [], connect4HS: 0});
+          let newUser = new UserData({username: user, hash: result, salt: newSalt, friends: [], wordleHS: [0,0,0,0,0,0,0], connect4HS: 0});
           let p = newUser.save();
           p.then(()=> {
               console.log('USER CREATED');
@@ -199,7 +203,7 @@ app.post('/login/user', function(req, res){
               let sid = addSession(user); 
               res.cookie("login", 
                 {username: user, sessionID: sid}, 
-                {maxAge: 10000000 * 2 });
+                {maxAge: 10000 * 2 });
               res.end('SUCCESS');
           }
           else {
@@ -209,11 +213,53 @@ app.post('/login/user', function(req, res){
   })
 })
 
-app.use('./public_html/*', authenticate);
+app.use('/ConnectFour/ConnectFour.html', authenticate);
+app.use('/wordle/index.html', authenticate);
+app.use('/menu_page/*', authenticate);
+app.use('/leaderboard_page/*', authenticate);
 // Getting the current user. 
 app.get('/current/user', function(req, res){
   res.end(req.cookies.login.username);
 });
+
+
+// getting current user's high score
+app.get('/get/user/hs', function(req, res){
+  let u = req.cookies.login.username;
+  let p1 = UserData.findOne({username: {$regex: u}}).exec();
+  p1.then((documents) =>{
+      let currentUser = documents;
+      console.log(currentUser.wordleHS.toString());
+      res.json(currentUser.wordleHS);
+  })
+})
+
+// updating current user's high score
+app.post('/post/:game', function(req, res){
+  let u = req.cookies.login.username;
+  let p1 = UserData.findOne({username: {$regex: u}}).exec();
+  p1.then((documents) =>{    
+    let currentUser = documents;
+    if (req.params.game == 'wordle'){
+      let temp = currentUser.wordleHS;
+      if (temp.length == 7){
+        for (let i = 0; i <temp.length; i++){
+          temp[i] += req.body.score[i];
+        } 
+      } else {
+        temp = req.body.score;
+      }
+
+      currentUser.wordleHS = temp;
+      currentUser.save();
+    } else {
+      currentUser.connect4HS ++;
+      currentUser.save();
+    }
+  })
+  res.end();
+});
+app.use(express.static('public_html')); // serve files in public_html
 //==========================================================================
 /*
 End of Login and User Session
@@ -251,8 +297,6 @@ End of Login and User Session
   app.get('/get/leaderboard/wordle', async (req, res) => {
 
     // find top 10 wordle
-
-  
   })
 
 const expressServer = app.listen(port, () => {
