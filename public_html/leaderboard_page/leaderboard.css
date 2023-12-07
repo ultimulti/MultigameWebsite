@@ -1,0 +1,149 @@
+
+/*---------------------------------------------- Custom Colors --------------------------------------------------------*/
+:root {
+  --darknavy: #00100F;
+  --darknavyshadow:rgba(0, 16, 15, 0.95);
+  --darknavytransparent:rgba(0, 16, 15, 0.75);
+  --navy: #072F2E;
+  --navytransparent: rgba(7, 47, 46, 0.5);
+  --darkcyan: #017481;
+  --cyan: #0092A2;
+  --cyantransparent: #0092a277;
+  --neoncyan: #00e5ff;
+}
+
+/*---------------------------------------------- Placeholder text color ----------------------------------------------*/
+::placeholder {
+  color: var(--navytransparent);
+  opacity: 1;
+}
+
+/*---------------------------------------------- CSS Reset -----------------------------------------------------------*/
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+textarea:focus, input:focus{
+  outline: none;
+}
+
+/*---------------------------------------------- Background ----------------------------------------------------------*/
+body {
+  background: linear-gradient(180deg, var(--darknavyshadow) 50%, #00000000 100%), url('../images/sky.jpg'); /*photo is public domain by Philip Myrtorp on Unsplash*/
+  background-attachment: fixed; /* allows gradient to fill page */
+  background-size: cover;
+}
+
+#lb_page {
+  display: flex;
+  height: 100%;
+  width: 100%;
+}
+
+/*---------------------------------------------- Text ----------------------------------------------------------------*/
+#lb_wordle_board_title, #lb_connect4_board_title {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 50px;
+  color: var(--neoncyan);
+  text-align: center;
+  margin-bottom: 3%;
+}
+
+#lb_username, #lb_score {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 20px;
+  color: var(--neoncyan);
+  margin-left: 10%;
+  display: inline-block;
+}
+
+#lb_score {
+  float: right;
+  padding-right: 10%;
+}
+
+/*---------------------------------------------- Leaderboard Box -----------------------------------------------------------*/
+#lb_wordle_board, #lb_connect4_board {
+  margin: 10%;
+  margin-top: 7%;
+  padding: 5% 0% 2% 0%;
+  width: 33%;
+  height: 50%;
+  background: var(--darknavytransparent);
+  border-width: 10px;
+  border-style: solid;
+  border-image-slice: 1;
+  border-image-source: linear-gradient(180deg, var(--cyan) 10%, var(--darknavy) 50%);
+}
+
+.lb_user {
+  background-color: var(--navy);
+  height: 5%;
+  width: 70%;
+  margin: auto;
+  margin-bottom: 10px;
+}
+
+/*---------------------------------------------- Nav Bar -------------------------------------------------------------*/
+
+main {
+  margin-left: 5rem;
+  padding: 1rem;
+}
+
+.navbar {
+  width: 5rem;
+  height: 100vh;
+  position: fixed;
+  background-color: #282828;
+  transition: 200ms ease;
+}
+
+.navbar-nav {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items:center;
+  height: 100%;
+}
+
+.nav-item {
+  width: 100%;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  height: 5rem;
+  color: #00e5ff;
+  text-decoration: none;
+  filter: grayscale(100%) opacity(0.7);
+  transition: 600ms;
+}
+
+.nav-link:hover {
+  filter: grayscale(0%) opacity(1);
+  background: #017481;
+}
+
+.link-text {
+  display: none;
+  margin-left: 1rem;
+}
+
+.nav-link svg {
+  min-width: 2rem;
+  margin: 0 1.5rem;
+}
+
+.navbar:hover {
+  width: 16rem;
+}
+
+.navbar:hover .link-text {
+  display: block;
+}

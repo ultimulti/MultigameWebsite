@@ -12,8 +12,10 @@ const app = express();
 
 const port = 3000;
 
+app.use(cookieParser()); 
 app.use(parser.urlencoded({ extended: true }));
 app.use(express.json());
+
 app.use(express.static('public_html')); // serve files in public_html
 app.use(cookieParser());
 
@@ -23,6 +25,7 @@ Thompson's Wordle code.
 //==========================================================================
 const fs = require('fs'); // file system module
 const { resourceLimits } = require('worker_threads');
+const { get } = require('http');
 
 //set up storage for answer words and valid words.
 const answerList = [];
@@ -30,11 +33,11 @@ const validList = [];
 
 //fill in the storage for answer words and valid words.
 function getAnswerAndKeyList() {
-    const answerData = fs.readFileSync('public_html/answer.txt','utf8');
-    const validData = fs.readFileSync('public_html/valid.txt','utf8');
+    const answerData = fs.readFileSync('public_html/answer.txt',{encoding: 'utf8', flag: 'r'});
+    const validData = fs.readFileSync('public_html/valid.txt',{encoding: 'utf8', flag: 'r'});
 
-    answerList.push(...answerData.split('\r\n'));
-    validList.push(...validData.split('\r\n'));
+    answerList.push(...answerData.replaceAll('\r', '').split('\n'));
+    validList.push(...validData.replaceAll('\r', '').split('\n'));
     }
 
 // get answer and key and store them in the lists
@@ -134,12 +137,13 @@ function authenticate(req, res, next) {
   if (c != undefined) {
     if (sessions[c.login.username] != undefined &&
       sessions[c.login.username].id == c.login.sessionID) {
-      next();
+      console.log("AUTHENTICATED");
+        next();
     } else {
-      res.redirect('../index.html');
+      res.redirect('/index.html');
     }
-  }  else {
-    res.redirect('../index.html');
+  } else {
+    res.redirect('/index.html');
   }
 }
 
@@ -162,7 +166,7 @@ app.post('/add/user', function(req, res){
           let data = h.update(toHash, 'utf-8');
           let result = data.digest('hex');
 
-          let newUser = new UserData({username: user, hash: result, salt: newSalt, friends: [], wordleHS: [], connect4HS: 0});
+          let newUser = new UserData({username: user, hash: result, salt: newSalt, friends: [], wordleHS: [0,0,0,0,0,0,0], connect4HS: 0});
           let p = newUser.save();
           p.then(()=> {
               console.log('USER CREATED');
@@ -200,10 +204,11 @@ app.post('/login/user', function(req, res){
           console.log(currentUser.hash);
 
           if (result == currentUser.hash){
-              let sid = addSession(user);
-              res.cookie("login",
-                {username: user, sessionID: sid},
-                {maxAge: 10000000 * 2 });
+
+              let sid = addSession(user); 
+              res.cookie("login", 
+                {username: user, sessionID: sid}, 
+                {maxAge: 10000 * 2 });
               res.end('SUCCESS');
           }
           else {
@@ -213,31 +218,63 @@ app.post('/login/user', function(req, res){
   })
 })
 
-app.use('./public_html/*', authenticate);
-// Getting the current user.
+
+app.use('/ConnectFour/ConnectFour.html', authenticate);
+app.use('/wordle/index.html', authenticate);
+app.use('/menu_page/*', authenticate);
+app.use('/leaderboard_page/*', authenticate);
+// Getting the current user. 
 app.get('/current/user', function(req, res){
   res.end(req.cookies.login.username);
 });
 
-app.post('/post/:game', function(req, res){
+app.post('/post/connect4', function(req, res){
   let u = req.body.username;
   let p1 = UserData.findOne({username: {$regex: u}}).exec();
   p1.then((user) =>{
     let currentUser = user;
+    currentUser.connect4HS = currentUser.connect4HS + 1;
+    currentUser.save();
+  })
+});
+
+// getting current user's high score
+app.get('/get/user/hs', function(req, res){
+  let u = req.cookies.login.username;
+  let p1 = UserData.findOne({username: {$regex: u}}).exec();
+  p1.then((documents) =>{
+      let currentUser = documents;
+      console.log(currentUser.wordleHS.toString());
+      res.json(currentUser.wordleHS);
+  })
+})
+
+// updating current user's high score
+app.post('/post/wordle', function(req, res){
+  let u = req.cookies.login.username;
+  let p1 = UserData.findOne({username: {$regex: u}}).exec();
+  p1.then((documents) =>{    
+    let currentUser = documents;
     if (req.params.game == 'wordle'){
       let temp = currentUser.wordleHS;
-      for (let i = 0; i <temp.length; i++){
-        temp[i] += req.body.score[i];
+      if (temp.length == 7){
+        for (let i = 0; i <temp.length; i++){
+          temp[i] += req.body.score[i];
+        } 
+      } else {
+        temp = req.body.score;
       }
+
       currentUser.wordleHS = temp;
-      console.log(currentUser.wordleHS);
       currentUser.save();
     } else {
-      currentUser.connect4HS = currentUser.connect4HS + 1;
+      currentUser.connect4HS ++;
       currentUser.save();
     }
   })
+  res.end();
 });
+app.use(express.static('public_html')); // serve files in public_html
 //==========================================================================
 /*
 End of Login and User Session
@@ -268,12 +305,15 @@ End of Login and User Session
 
     // find top 10 connect 4
 
+    UserData.find().sort( { connect4HS : -1 } ).then((users) => {
+      res.status(200).json(users)
+    })
+
   })
 
   app.get('/get/leaderboard/wordle', async (req, res) => {
 
     // find top 10 wordle
-
 
   })
 
