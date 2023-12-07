@@ -26,11 +26,11 @@ const validList = [];
 
 //fill in the storage for answer words and valid words. 
 function getAnswerAndKeyList() {
-    const answerData = fs.readFileSync('public_html/answer.txt','utf8');
-    const validData = fs.readFileSync('public_html/valid.txt','utf8');
+    const answerData = fs.readFileSync('public_html/answer.txt',{encoding: 'utf8', flag: 'r'});
+    const validData = fs.readFileSync('public_html/valid.txt',{encoding: 'utf8', flag: 'r'});
 
-    answerList.push(...answerData.split('\r\n'));
-    validList.push(...validData.split('\r\n'));
+    answerList.push(...answerData.replaceAll('\r', '').split('\n'));
+    validList.push(...validData.replaceAll('\r', '').split('\n'));
     }
 
 // get answer and key and store them in the lists
