@@ -30,3 +30,7 @@ function wordle() {
 }
 
 document.getElementById("m_wordle_button").addEventListener("click", wordle);
+
+function help() {
+    window.location.href = '../help_page/index.html';
+}

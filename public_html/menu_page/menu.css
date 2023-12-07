@@ -45,7 +45,7 @@ body {
 
 #m_nav_bar {
     width: 100%;
-    height: 12vh;
+    height: 11vh;
     background-color: var(--darknavy);
     display: block;
 }
@@ -60,14 +60,14 @@ body {
     width: 20.9%;
     height: 80%;
     text-align: center;
-    margin-left: 10%;
+    margin-left: 25%;
     margin-top: 0.5%;
     display: inline-block;
 }
 
 #m_nav_connect4 {
     width: 20.9%;
-    height: 80%;
+    height: 70%;
     text-align: center;
     margin-left: 10%;
     margin-top: 0.5%;
@@ -75,7 +75,7 @@ body {
 }
 
 #m_nav_profile {
-    width: 20%;
+    width: 13%;
     height: 70%;
     text-align: right;
     margin-right: 1%;
@@ -89,8 +89,8 @@ body {
 }
 
 #m_wordle_hs_label, #m_connect4_hs_label {
+    padding-top: 2%;
     font-size: 20px;
-    padding-top: 5%;
 }
 
 #m_wordle_hs, #m_connect4_hs {
@@ -98,33 +98,6 @@ body {
     padding-top: 5px;
 }
 
-/*---------------------------------------------- Friends Side Bar ----------------------------------------------------*/
-
-#m_friends_tab {
-    z-index: -1;
-    width: 20%;
-    height: 88vh;
-    background-color: var(--darknavytransparent);
-    display: block;
-    float: right;
-}
-
-#m_friend_box {
-    background-color: var(--darknavy);
-    color: white;
-    width: 90%;
-    height: 10%;
-    text-align: center;
-    margin-left: 5%;
-    margin-top: 1%;
-    display: block;
-    float: left;
-    padding: 5px;
-}
-
-.m_friend_stats {
-    color: gray;
-}
 
 /*---------------------------------------------- Game Selection ------------------------------------------------------*/
 
@@ -134,8 +107,8 @@ body {
     background-color: white;
     display: block;
     position: relative;
-    margin-left: 10%;
-    margin-top: 13vh;
+    margin-left: 25%;
+    margin-top: 12vh;
     border-width: 10px;
     border-image-slice: 1;
     border-image-source: linear-gradient(360deg, var(--cyan) 10%, var(--darknavy) 50%);
@@ -182,6 +155,21 @@ body {
     cursor: pointer;
 }
 
+#m_help_button {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    display: block;
+    border: none;
+    background-color: var(--cyan);
+    color: white;
+    width: 80%;
+    height: 30px;
+    text-align: center;
+    margin: auto;
+    margin-top: 3vh;
+    cursor: pointer;
+}
+
 .m_connect4_button {
     display: block;
     font-family: Arial, Helvetica, sans-serif;
@@ -196,6 +184,10 @@ body {
     cursor: pointer;
 }
 
+#m_connect4_card {
+    margin-left: 10%;
+}
+
 #m_connect4_easy {
     margin-top: 18vh;
 }
@@ -203,4 +195,76 @@ body {
 button:hover {
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
+
+#Host_Game {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 20px;
+    display: block;
+    border: none;
+    background-color: var(--cyan);
+    color: white;
+    width: 80%;
+    height: 30px;
+    text-align: center;
+    margin: auto;
+    margin-top: 17.5vh;
+    cursor: pointer;
+}
+
+/*---------------------------------------------- Nav Bar -------------------------------------------------------------*/
+
+.navbar {
+    width: 5rem;
+    height: 100vh;
+    position: fixed;
+    background-color: #282828;
+    transition: 200ms ease;
+  }
+
+  .navbar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items:center;
+    height: 100%;
+  }
+
+  .nav-item {
+    width: 100%;
+  }
+
+  .nav-link {
+    display: flex;
+    align-items: center;
+    height: 5rem;
+    color: #00e5ff;
+    text-decoration: none;
+    filter: grayscale(100%) opacity(0.7);
+    transition: 600ms;
+  }
+
+  .nav-link:hover {
+    filter: grayscale(0%) opacity(1);
+    background: #017481;
+  }
+
+  .link-text {
+    display: none;
+    margin-left: 1rem;
+  }
+
+  .nav-link svg {
+    min-width: 2rem;
+    margin: 0 1.5rem;
+  }
+
+  .navbar:hover {
+    width: 16rem;
+  }
+
+  .navbar:hover .link-text {
+    display: block;
+  }
 
