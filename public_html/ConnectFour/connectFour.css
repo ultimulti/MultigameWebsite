@@ -35,7 +35,7 @@ textarea:focus, input:focus{
 
 
 body {
-  background: linear-gradient(180deg, var(--darknavyshadow) 50%, #00000000 100%), url('../login_page/sky.jpg'); /*photo is public domain by Philip Myrtorp on Unsplash*/
+  background: linear-gradient(180deg, var(--darknavyshadow) 50%, #00000000 100%), url('../images/sky.jpg'); /*photo is public domain by Philip Myrtorp on Unsplash*/
   background-attachment: fixed; /* allows gradient to fill page */
   background-size: cover;
   overflow:auto;
@@ -43,6 +43,7 @@ body {
 
 #page {
   display: flex;
+  flex-direction: column;
   height: 100%;
   width: 100%;
 }
@@ -85,6 +86,16 @@ body {
   color: var(--cyan);
   opacity: 0.5;
   text-align: center;
+}
+
+#ROOMID {
+  text-align: center;
+  color: var(--cyan);
+}
+
+#id_div {
+  width: 100%;
+  display: inline-block;
 }
 
 /*---------------------------------------------- Nav Bar -------------------------------------------------------------*/
