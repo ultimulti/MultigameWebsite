@@ -26,5 +26,7 @@ function joinGame() {
 }
 
 function wordle() {
-    // take to wordle
+    window.location.href = '../wordle/index.html';
 }
+
+document.getElementById("m_wordle_button").addEventListener("click", wordle);
